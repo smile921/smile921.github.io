@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://smile921.github.io/"/>
-  <updated>2017-03-14T02:09:56.202Z</updated>
+  <updated>2017-03-17T10:00:24.878Z</updated>
   <id>http://smile921.github.io/</id>
   
   <author>
@@ -14,6 +14,36 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Ethereum Blockchain Block Raw Data in brief</title>
+    <link href="http://smile921.github.io/201703Ethereum-Blockchain-Block-Raw-Data-in-brief/"/>
+    <id>http://smile921.github.io/201703Ethereum-Blockchain-Block-Raw-Data-in-brief/</id>
+    <published>2017-03-17T09:04:56.000Z</published>
+    <updated>2017-03-17T10:00:24.878Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Ethereum-Blockchain-Block-Raw-Data-in-brief"><a href="#Ethereum-Blockchain-Block-Raw-Data-in-brief" class="headerlink" title="Ethereum Blockchain Block Raw Data in brief"></a>Ethereum Blockchain Block Raw Data in brief</h1><h2 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h2><p>由于最近在看智能合约相关内容，但一个对区块链有一些隐约的困惑，没有一个感性的认识。于是有了想分析区块内容的想法，以便能更深刻的认识区块链。其次最近简单学习了以太坊区块数据的格式，做个简答小结。主要资料可参考 <a href="https://github.com/ethereum/wiki" target="_blank" rel="external">Ethereum Wiki</a></p>
+<h2 id="区块格式"><a href="#区块格式" class="headerlink" title="区块格式"></a>区块格式</h2><h3 id="以太坊区块格式"><a href="#以太坊区块格式" class="headerlink" title="以太坊区块格式"></a>以太坊区块格式</h3><p><a href="https://github.com/ethereum/wiki/blob/master/Block-Protocol-2.0.md" target="_blank" rel="external">主要参考这里</a><br>一个完整的区块定义格式是这样的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">[</div><div class="line">    block_header,</div><div class="line">    transaction_list,</div><div class="line">    uncle_list,</div><div class="line">    stack_trace</div><div class="line">]</div><div class="line">其中:</div><div class="line"></div><div class="line">transaction_list = [</div><div class="line">    transaction 0,</div><div class="line">    transaction 1,</div><div class="line">    ...</div><div class="line">]</div><div class="line"></div><div class="line">uncle list = [</div><div class="line">    uncle_block_header_1,</div><div class="line">    uncle_block_header_2,</div><div class="line">    ...</div><div class="line">]</div><div class="line"></div><div class="line">block_header = [</div><div class="line">    parent hash,</div><div class="line">    number,</div><div class="line">    TRIEHASH(transaction_list),</div><div class="line">    TRIEHASH(uncle_list),</div><div class="line">    TRIEHASH(stack_trace),</div><div class="line">    coinbase address,</div><div class="line">    state_root,</div><div class="line">    difficulty,</div><div class="line">    timestamp,</div><div class="line">    extra_data,</div><div class="line">    nonce</div><div class="line">]</div><div class="line"></div><div class="line">stack_trace = [</div><div class="line">    [ medhash 0, stkhash 0 ],</div><div class="line">    [ medhash 1, stkhash 1 ],</div><div class="line">    ...</div><div class="line">]</div></pre></td></tr></table></figure></p>
+<p>比如一个私链上的创世块是这样的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">   rawData:</div><div class="line">   	f901f8f901f3a00000000000000000000000000000000000000000000000000000000000000000a01dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347940000000000000000000000000000000000000000a0a4328ecabdd749f4e24d190cd2bd00f6609f3334bf94a55fc2ea3e4ede05a44ba056e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421a056e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421b90100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008240008084ffffffff808080a00000000000000000000000000000000000000000000000000000000000000000880000000000000042c0c0</div><div class="line">   解析各个部分并按rfc定义用RLP编码转16进制输出</div><div class="line">BlockData [ </div><div class="line">truehash=55da6a62b7a8d0a438aa3934d3571b12269eb7c011a4e62df171de5c05fd2853</div><div class="line">true  hash=55da6a62b7a8d0a438aa3934d3571b12269eb7c011a4e62df171de5c05fd2853</div><div class="line">true  parentHash=0000000000000000000000000000000000000000000000000000000000000000</div><div class="line">true  unclesHash=1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347</div><div class="line">true  coinbase=0000000000000000000000000000000000000000</div><div class="line">true  stateRoot=a4328ecabdd749f4e24d190cd2bd00f6609f3334bf94a55fc2ea3e4ede05a44b</div><div class="line">true  txTrieHash=56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421</div><div class="line">true  receiptsTrieHash=56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421</div><div class="line">true  difficulty=4000   </div><div class="line">true  number=0        gasLimit=ffffffff</div><div class="line">true  gasUsed=0       timestamp=0 (1970.01.01 08:00:00)</div><div class="line">true  extraData=</div><div class="line">true  mixHash=0000000000000000000000000000000000000000000000000000000000000000</div><div class="line">true  nonce=0000000000000042</div><div class="line">trueUncles []              </div><div class="line">trueTxs []</div><div class="line">]</div></pre></td></tr></table></figure></p>
+<p>每个transaction 和uncle_block_header 都是一张表。工作量证明数据是区块数据去除掉nonce（交易数）后的RLP编码。<br>uncle_list 和 transaction_list 分别是叔区块头和区块里的交易构成的表。nonce 和 extra_data 都被限制为最大32字节，除了在创世区块中参数extra_data会更大。<br>state_root 是一个包含所有地址的（key, value）对的默克尔-帕特里夏树（Merkle Patricia tree ）的根， 其中每一个地址都由一个20字节二进制字符串表示。对于每个地址，储存在默克尔-帕特里夏树的 value 字段是一个对以下格式对象进行RLP串接编码形成的字符串：<br>[ balance, nonce, contract_root, storage_deposit ]</p>
+<p>nonce 是该地址的交易数，每做一次交易都会增加1。其目的是(1)使每个交易只有一次合法的机会以防范重放攻击，(2)使得构建一个和已存合约有相同哈希的合约成为不可能（更准确地说，密码学意义上不可行）。balance 指的是合约或地址的平衡账目，以伟为单位。contract_root 是另一个帕特里夏树的根，在该地址被一个合约控制的情况下包含该合约的内存。如果一个地址没有被一个合约控制，contract_root 就会是一个空字符串。storage_deposit是一个计数器，储存花费的储存费用</p>
+<p>注 RLP 递归长度前缀编码 (recursive length prefix encoding,RLP)<br>这种编码格式将任意长度和维度的字符串构成的数组串接成字符串。例如，[‘dog’, ‘cat’]被串接 (以字节数组格式) 为 [ 130, 67, 100, 111, 103, 67, 99, 97, 116];其基本的思想是把数据类型和长度编码成一个单独的字节放在实际数据的前面(例如‘dog’的字节数组编码为[ 100, 111, 103 ], 于是串接后就成了[ 67, 100, 111, 103 ].)注意RLP编码正如其名字表示的一样，是递归的；当RLP编码一个数组时，实际上是在对每一个元素的RLP编码级联成的字符串编码。需要进一步提请注意的是，以太坊中所有数据都是整数；所以，如果有任何的以一个或多个0字节开头的哈希或者地址，这些0字节应该在计算出现问题的时候去除。以太坊中没有串接数据结构包含任何以0开头的数值。整数以大端基础256格式存储(例如32767字节数组格式为[ 127, 255 ])。</p>
+<p>详细代码可以参考ethereumj中Block的代码部分<br> <img src="/images/blockchain-fmt-11.png" alt="blockchain "></p>
+<h3 id="bitcoin-区块格式"><a href="#bitcoin-区块格式" class="headerlink" title="bitcoin 区块格式"></a>bitcoin 区块格式</h3><p>关于bitcoin的区块格式，已经有前人做了分析大致结构如下<br> <img src="/images/blockchain-fmt-01.png" alt="blockchain-fmt"><br> <img src="/images/blockchain-fmt-02.png" alt="blockchain-fmt"><br> <img src="/images/blockchain-fmt-03.png" alt="blockchain-fmt"><br><a href="https://blockchain.info/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f" target="_blank" rel="external">比特币创世区块</a>是这样的<br> <img src="/images/blockchain-fmt-04.png" alt="blockchain-fmt"><br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"> &#123;</div><div class="line">    &quot;txid&quot; : &quot;4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b&quot;,</div><div class="line">    &quot;version&quot; : 1,</div><div class="line">    &quot;locktime&quot; : 0,</div><div class="line">    &quot;vin&quot; : [</div><div class="line">        &#123;</div><div class="line">            &quot;coinbase&quot; : &quot;04ffff001d0104455468652054696d65732030332f4a616e2f32303039204368616e63656c6c6f72206f6e206272696e6b206f66207365636f6e64206261696c6f757420666f722062616e6b73&quot;,</div><div class="line">            &quot;sequence&quot; : 4294967295</div><div class="line">        &#125;</div><div class="line">    ],</div><div class="line">    &quot;vout&quot; : [</div><div class="line">        &#123;</div><div class="line">            &quot;value&quot; : 50.00000000,</div><div class="line">            &quot;n&quot; : 0,</div><div class="line">            &quot;scriptPubKey&quot; : &#123;</div><div class="line">                &quot;asm&quot; : &quot;04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f OP_CHECKSIG&quot;,</div><div class="line">                &quot;hex&quot; : &quot;4104678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5fac&quot;,</div><div class="line">                &quot;reqSigs&quot; : 1,</div><div class="line">                &quot;type&quot; : &quot;pubkey&quot;,</div><div class="line">                &quot;addresses&quot; : [</div><div class="line">                    &quot;1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa&quot;</div><div class="line">                ]</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><img src="/images/blockchain-fmt-05.png" alt="blockchain-fmt"><br><img src="/images/blockchain-fmt-06.png" alt="blockchain-fmt"><br><img src="/images/blockchain-fmt-07.png" alt="blockchain-fmt"><br><img src="/images/blockchain-fmt-08.png" alt="blockchain-fmt"><br><img src="/images/blockchain-fmt-09.png" alt="blockchain-fmt"></p>
+<p>关键代码在 bitcoinj 的Block的代码<br><img src="/images/blockchain-fmt-10.png" alt="blockchain "></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Ethereum-Blockchain-Block-Raw-Data-in-brief&quot;&gt;&lt;a href=&quot;#Ethereum-Blockchain-Block-Raw-Data-in-brief&quot; class=&quot;headerlink&quot; title=&quot;Ethere
+    
+    </summary>
+    
+    
+      <category term="blockchain" scheme="http://smile921.github.io/tags/blockchain/"/>
+    
+  </entry>
   
   <entry>
     <title>基于以太坊的智能合约开发入门</title>
@@ -101,11 +131,11 @@
     </summary>
     
     
+      <category term="笔记" scheme="http://smile921.github.io/tags/%E7%AC%94%E8%AE%B0/"/>
+    
       <category term="mongodb" scheme="http://smile921.github.io/tags/mongodb/"/>
     
       <category term="mongo" scheme="http://smile921.github.io/tags/mongo/"/>
-    
-      <category term="笔记" scheme="http://smile921.github.io/tags/%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
@@ -1011,116 +1041,6 @@ ExitFailure 1
       <category term="IM" scheme="http://smile921.github.io/tags/IM/"/>
     
       <category term="telegram" scheme="http://smile921.github.io/tags/telegram/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>API Documentation Browser</title>
-    <link href="http://smile921.github.io/201608API-Documentation-Browser/"/>
-    <id>http://smile921.github.io/201608API-Documentation-Browser/</id>
-    <published>2016-08-08T01:06:41.000Z</published>
-    <updated>2017-03-13T05:49:30.766Z</updated>
-    
-    <content type="html"><![CDATA[<p><a href="http://devdocs.io" target="_blank" rel="external">DevDocs</a><br><a href="https://github.com/Thibaut/devdocs" target="_blank" rel="external">DevDocs github</a></p>
-<h2 id="run-devdocs-in-docker"><a href="#run-devdocs-in-docker" class="headerlink" title="run devdocs in docker"></a>run devdocs in docker</h2><h3 id="First-build-the-image"><a href="#First-build-the-image" class="headerlink" title="First, build the image"></a>First, build the image</h3><pre><code>git clone https://github.com/Thibaut/devdocs.git &amp;&amp; cd devdocs 
-docker build -t thibaut/devdocs . 
-</code></pre><h3 id="Finally-start-a-DevDocs-container-access-http-localhost-9292"><a href="#Finally-start-a-DevDocs-container-access-http-localhost-9292" class="headerlink" title="Finally, start a DevDocs container (access http://localhost:9292)"></a>Finally, start a DevDocs container (access <a href="http://localhost:9292" target="_blank" rel="external">http://localhost:9292</a>)</h3><pre><code>docker run --name devdocs -d -p 9292:9292 thibaut/devdocs 
-</code></pre><hr>
-<h2 id="Sinatra：一个优雅地包装了Web开发的DSL"><a href="#Sinatra：一个优雅地包装了Web开发的DSL" class="headerlink" title="Sinatra：一个优雅地包装了Web开发的DSL"></a>Sinatra：一个优雅地包装了Web开发的DSL</h2><p>你相信用100行代码可以实现一个博客吗？用Sinatra框架就可以做到。下面就是这样子的一个Web应用： </p>
-<pre><code>Reprise - A Minimalistic Blog 
-</code></pre><p>这个应用的代码：点这里查看 </p>
-<p>一个简单的hello world的web应用要写多少代码？用Sinatra只需5行代码： </p>
-<pre><code>require &apos;rubygems&apos; 
-require &apos;sinatra&apos; 
-
-get &apos;/&apos; do 
-&apos;Hello World&apos; 
-end 
-</code></pre><p>安装方法： </p>
-<pre><code>$ gem install sinatra 
-$ ruby -rubygems hi.rb 
-</code></pre><hr>
-<p>Aaron Patterson和Mike Dalessio开发了一个新的Ruby解析HTML/XML的ruby库 － Nokogiri。他的速度比目前应用的最广泛的Hpricot还要快许多。经过Benchmark测试表明，Nokogiri在加载XML文档的速度是Hpricot的7倍，在XPATH搜索的速度是Hpricot的5倍，而在CSS选择器的搜索上面是Hpricot的1.62倍。 </p>
-<h2 id="因此Nokogiri被认为有可能取代Hpricot的新一代Ruby的解析库，他能够解析HTML-XML文件，能够提供XPATH支持，CSS选择器支持。安装Nokogiri的办法很简单：-gem-install-nokogiri"><a href="#因此Nokogiri被认为有可能取代Hpricot的新一代Ruby的解析库，他能够解析HTML-XML文件，能够提供XPATH支持，CSS选择器支持。安装Nokogiri的办法很简单：-gem-install-nokogiri" class="headerlink" title="因此Nokogiri被认为有可能取代Hpricot的新一代Ruby的解析库，他能够解析HTML/XML文件，能够提供XPATH支持，CSS选择器支持。安装Nokogiri的办法很简单： gem install nokogiri "></a>因此Nokogiri被认为有可能取代Hpricot的新一代Ruby的解析库，他能够解析HTML/XML文件，能够提供XPATH支持，CSS选择器支持。安装Nokogiri的办法很简单： gem install nokogiri </h2><h2 id="dash"><a href="#dash" class="headerlink" title="dash"></a>dash</h2><p>作为一名死coder，每天最常见的动作就是查看各种API文档，你一定也有过同时打开N个窗口（HTML、PDF、CHM），不停的在编辑器与文档之间切换的感受吧？怎么说呢，其实我很讨厌这种枯燥无味的动作，那么如何才能提高效率，减少无用功呢？下面就给大家介绍一款非常好用的Mac小工具：Dash，相比这个英文名，我跟喜欢叫它“叮当猫”，嘿嘿。 </p>
-<p>官方用一句话就概括了它的用途：Dash是一个API文档浏览器（ API Documentation Browser），以及代码片段管理工具（Code Snippet Manager）。你没看错，它就只有这两个功能，但确实是程序员（至少对于我来说）最为关心的特性，自己之前也用过了不少类似的工具，可以毫不夸张地说，Dash是它们之中做的最好的一个！<br>强悍的API文档浏览、搜索功能 </p>
-<p>想必这个功能是大家最常用的了吧，每天要反复查看、搜索那么多的API细节，没有一个好工具，单靠自己的双手如何应付得来？窗口不停的切来切去，很烦啊！Dash采用集成单一窗口的方式，很好的解决了这个问题</p>
-<h2 id="DevDocs"><a href="#DevDocs" class="headerlink" title="DevDocs "></a><a href="http://devdocs.io" target="_blank" rel="external">DevDocs</a> <a href="https://travis-ci.org/Thibaut/devdocs" target="_blank" rel="external"><img src="https://travis-ci.org/Thibaut/devdocs.svg?branch=master" alt="Build Status"></a></h2><p>DevDocs combines multiple API documentations in a fast, organized, and searchable interface.</p>
-<ul>
-<li>Created by <a href="http://thibaut.me" target="_blank" rel="external">Thibaut Courouble</a></li>
-</ul>
-<p>Keep track of development news:</p>
-<ul>
-<li>Watch the repository on <a href="https://github.com/Thibaut/devdocs/subscription" target="_blank" rel="external">GitHub</a></li>
-<li>Follow <a href="https://twitter.com/DevDocs" target="_blank" rel="external">@DevDocs</a> on Twitter</li>
-<li>Join the <a href="https://groups.google.com/d/forum/devdocs" target="_blank" rel="external">mailing list</a></li>
-</ul>
-<p>DevDocs is free and open source. If you like it, please consider supporting my work on <a href="https://gratipay.com/devdocs/" target="_blank" rel="external">Gratipay</a>. Thanks!</p>
-<p><strong>Table of Contents:</strong> <a href="#quick-start">Quick Start</a> · <a href="#vision">Vision</a> · <a href="#app">App</a> · <a href="#scraper">Scraper</a> · <a href="#available-commands">Commands</a> · <a href="#contributing">Contributing</a> · <a href="#copyright--license">License</a> · <a href="#questions">Questions?</a></p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><p>Unless you wish to contribute to the project, I recommend using the hosted version at <a href="http://devdocs.io" target="_blank" rel="external">devdocs.io</a>. It’s up-to-date and works offline out-of-the-box.</p>
-<p>DevDocs is made of two pieces: a Ruby scraper that generates the documentation and metadata, and a JavaScript app powered by a small Sinatra app.</p>
-<p>DevDocs requires Ruby 2.3.0, libcurl, and a JavaScript runtime supported by <a href="https://github.com/rails/execjs#readme" target="_blank" rel="external">ExecJS</a> (included in OS X and Windows; <a href="https://nodejs.org/en/" target="_blank" rel="external">Node.js</a> on Linux). Once you have these installed, run the following commands:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">git clone https://github.com/Thibaut/devdocs.git &amp;&amp; cd devdocs</div><div class="line">gem install bundler</div><div class="line">bundle install</div><div class="line">thor docs:download --default</div><div class="line">rackup</div></pre></td></tr></table></figure>
-<p>Finally, point your browser at <a href="http://localhost:9292" target="_blank" rel="external">localhost:9292</a> (the first request will take a few seconds to compile the assets). You’re all set.</p>
-<p>The <code>thor docs:download</code> command is used to download pre-generated documentations from DevDocs’s servers (e.g. <code>thor docs:download html css</code>). You can see the list of available documentations and versions by running <code>thor docs:list</code>. To update all downloaded documentations, run <code>thor docs:download --installed</code>.</p>
-<p><strong>Note:</strong> there is currently no update mechanism other than <code>git pull origin master</code> to update the code and <code>thor docs:download --installed</code> to download the latest version of the docs. To stay informed about new releases, be sure to <a href="https://github.com/Thibaut/devdocs/subscription" target="_blank" rel="external">watch</a> this repository.</p>
-<p>Alternatively, DevDocs may be started as a Docker container:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># First, build the image</div><div class="line">git clone https://github.com/Thibaut/devdocs.git &amp;&amp; cd devdocs</div><div class="line">docker build -t thibaut/devdocs .</div><div class="line"></div><div class="line"># Finally, start a DevDocs container (access http://localhost:9292)</div><div class="line">docker run --name devdocs -d -p 9292:9292 thibaut/devdocs</div></pre></td></tr></table></figure>
-<h2 id="Vision"><a href="#Vision" class="headerlink" title="Vision"></a>Vision</h2><p>DevDocs aims to make reading and searching reference documentation fast, easy and enjoyable.</p>
-<p>The app’s main goals are to: keep load times as short as possible; improve the quality, speed, and order of search results; maximize the use of caching and other performance optimizations; maintain a clean and readable user interface; be fully functional offline; support full keyboard navigation; reduce “context switch” by using a consistent typography and design across all documentations; reduce clutter by focusing on a specific category of content (API/reference) and indexing only the minimum useful to most developers.</p>
-<p><strong>Note:</strong> DevDocs is neither a programming guide nor a search engine. All our content is pulled from third-party sources and the project doesn’t intend to compete with full-text search engines. Its backbone is metadata; each piece of content is identified by a unique, “obvious” and short string. Tutorials, guides and other content that don’t meet this requirement are outside the scope of the project.</p>
-<h2 id="App"><a href="#App" class="headerlink" title="App"></a>App</h2><p>The web app is all client-side JavaScript, written in <a href="http://coffeescript.org" target="_blank" rel="external">CoffeeScript</a>, and powered by a small <a href="http://www.sinatrarb.com" target="_blank" rel="external">Sinatra</a>/<a href="https://github.com/rails/sprockets" target="_blank" rel="external">Sprockets</a> application. It relies on files generated by the <a href="#scraper">scraper</a>.</p>
-<p>Many of the code’s design decisions were driven by the fact that the app uses XHR to load content directly into the main frame. This includes stripping the original documents of most of their HTML markup (e.g. scripts and stylesheets) to avoid polluting the main frame, and prefixing all CSS class names with an underscore to prevent conflicts.</p>
-<p>Another driving factor is performance and the fact that everything happens in the browser. <code>applicationCache</code> (which comes with its own set of constraints) and <code>localStorage</code> are used to speed up the boot time, while memory consumption is kept in check by allowing the user to pick his/her own set of documentations. The search algorithm is kept simple because it needs to be fast even searching through 100,000 strings.</p>
-<p>DevDocs being a developer tool, the browser requirements are high:</p>
-<ol>
-<li>On the desktop:<ul>
-<li>Recent version of Chrome, Firefox, or Opera</li>
-<li>Safari 8+</li>
-<li>IE / Edge 10+</li>
-</ul>
-</li>
-<li>On mobile:<ul>
-<li>iOS 8+</li>
-<li>Android 4.1+</li>
-<li>Windows Phone 8+</li>
-</ul>
-</li>
-</ol>
-<p>This allows the code to take advantage of the latest DOM and HTML5 APIs and make developing DevDocs a lot more fun!</p>
-<h2 id="Scraper"><a href="#Scraper" class="headerlink" title="Scraper"></a>Scraper</h2><p>The scraper is responsible for generating the documentation and index files (metadata) used by the <a href="#app">app</a>. It’s written in Ruby under the <code>Docs</code> module.</p>
-<p>There are currently two kinds of scrapers: <code>UrlScraper</code> which downloads files via HTTP and <code>FileScraper</code> which reads them from the local filesystem. They both make copies of HTML documents, recursively following links that match a set of rules and applying all sorts of modifications along the way, in addition to building an index of the files and their metadata. Documents are parsed using <a href="http://nokogiri.org" target="_blank" rel="external">Nokogiri</a>.</p>
-<p>Modifications made to each document include:</p>
-<ul>
-<li>removing content such as the document structure (<code>&lt;html&gt;</code>, <code>&lt;head&gt;</code>, etc.), comments, empty nodes, etc.</li>
-<li>fixing links (e.g. to remove duplicates)</li>
-<li>replacing all external (not scraped) URLs with their fully qualified counterpart</li>
-<li>replacing all internal (scraped) URLs with their unqualified and relative counterpart</li>
-<li>adding content, such as a title and link to the original document</li>
-</ul>
-<p>These modifications are applied via a set of filters using the <a href="https://github.com/jch/html-pipeline" target="_blank" rel="external">HTML::Pipeline</a> library. Each scraper includes filters specific to itself, one of which is tasked with figuring out the pages’ metadata.</p>
-<p>The end result is a set of normalized HTML partials and two JSON files (index + offline data). Because the index files are loaded separately by the <a href="#app">app</a> following the user’s preferences, the scraper also creates a JSON manifest file containing information about the documentations currently available on the system (such as their name, version, update date, etc.).</p>
-<p>More information about scrapers and filters is available on the <a href="https://github.com/Thibaut/devdocs/wiki" target="_blank" rel="external">wiki</a>.</p>
-<h2 id="Available-Commands"><a href="#Available-Commands" class="headerlink" title="Available Commands"></a>Available Commands</h2><p>The command-line interface uses <a href="http://whatisthor.com" target="_blank" rel="external">Thor</a>. To see all commands and options, run <code>thor list</code> from the project’s root.</p>
-<p>```</p>
-<h1 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h1><p>rackup              # Start the server (ctrl+c to stop)<br>rackup –help       # List server options</p>
-<h1 id="Docs"><a href="#Docs" class="headerlink" title="Docs"></a>Docs</h1><p>thor docs:list      # List available documentations<br>thor docs:download  # Download one or more documentations<br>thor docs:manifest  # Create the manifest file used by the app<br>thor docs:generate  # Generate/scrape a documentation<br>thor docs:page      # Generate/scrape a documentation page<br>thor docs:package   # Package a documentation for use with docs:download<br>thor docs:clean     # Delete documentation packages</p>
-<h1 id="Console"><a href="#Console" class="headerlink" title="Console"></a>Console</h1><p>thor console        # Start a REPL<br>thor console:docs   # Start a REPL in the “Docs” module<br>Note: tests can be run quickly from within the console using the “test” command. Run “help test”<br>for usage instructions.</p>
-<h1 id="Tests"><a href="#Tests" class="headerlink" title="Tests"></a>Tests</h1><p>thor test:all       # Run all tests<br>thor test:docs      # Run “Docs” tests<br>thor test:app       # Run “App” tests</p>
-<h1 id="Assets"><a href="#Assets" class="headerlink" title="Assets"></a>Assets</h1><p>thor assets:compile # Compile assets (not required in development mode)<br>thor assets:clean   # Clean old assets</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;&lt;a href=&quot;http://devdocs.io&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;DevDocs&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://github.com/Thibaut/devdocs&quot; target=&quot;_blank&quot; re
-    
-    </summary>
-    
-    
-      <category term="api" scheme="http://smile921.github.io/tags/api/"/>
-    
-      <category term="devdoc" scheme="http://smile921.github.io/tags/devdoc/"/>
-    
-      <category term="ruby" scheme="http://smile921.github.io/tags/ruby/"/>
     
   </entry>
   

@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Smile921" />
+
+
+
+<meta name="description" content="Ethereum Blockchain Block Raw Data in brief缘起由于最近在看智能合约相关内容，但一个对区块链有一些隐约的困惑，没有一个感性的认识。于是有了想分析区块内容的想法，以便能更深刻的认识区块链。其次最近简单学习了以太坊区块数据的格式，做个简答小结。主要资料可参考 Ethereum Wiki
+区块格式以太坊区块格式主要参考这里一个完整的区块定义格式是这样的12345">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ethereum Blockchain Block Raw Data in brief">
+<meta property="og:url" content="http://smile921.github.io/201703Ethereum-Blockchain-Block-Raw-Data-in-brief/index.html">
+<meta property="og:site_name" content="关注网络安全动态，追求心中的向往">
+<meta property="og:description" content="Ethereum Blockchain Block Raw Data in brief缘起由于最近在看智能合约相关内容，但一个对区块链有一些隐约的困惑，没有一个感性的认识。于是有了想分析区块内容的想法，以便能更深刻的认识区块链。其次最近简单学习了以太坊区块数据的格式，做个简答小结。主要资料可参考 Ethereum Wiki
+区块格式以太坊区块格式主要参考这里一个完整的区块定义格式是这样的12345">
+<meta property="og:image" content="http://smile921.github.io/images/blockchain-fmt-11.png">
+<meta property="og:image" content="http://smile921.github.io/images/blockchain-fmt-01.png">
+<meta property="og:image" content="http://smile921.github.io/images/blockchain-fmt-02.png">
+<meta property="og:image" content="http://smile921.github.io/images/blockchain-fmt-03.png">
+<meta property="og:image" content="http://smile921.github.io/images/blockchain-fmt-04.png">
+<meta property="og:image" content="http://smile921.github.io/images/blockchain-fmt-05.png">
+<meta property="og:image" content="http://smile921.github.io/images/blockchain-fmt-06.png">
+<meta property="og:image" content="http://smile921.github.io/images/blockchain-fmt-07.png">
+<meta property="og:image" content="http://smile921.github.io/images/blockchain-fmt-08.png">
+<meta property="og:image" content="http://smile921.github.io/images/blockchain-fmt-09.png">
+<meta property="og:image" content="http://smile921.github.io/images/blockchain-fmt-10.png">
+<meta property="og:updated_time" content="2017-03-17T10:00:24.878Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ethereum Blockchain Block Raw Data in brief">
+<meta name="twitter:description" content="Ethereum Blockchain Block Raw Data in brief缘起由于最近在看智能合约相关内容，但一个对区块链有一些隐约的困惑，没有一个感性的认识。于是有了想分析区块内容的想法，以便能更深刻的认识区块链。其次最近简单学习了以太坊区块数据的格式，做个简答小结。主要资料可参考 Ethereum Wiki
+区块格式以太坊区块格式主要参考这里一个完整的区块定义格式是这样的12345">
+<meta name="twitter:image" content="http://smile921.github.io/images/blockchain-fmt-11.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="关注网络安全动态，追求心中的向往" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Ethereum Blockchain Block Raw Data in brief | 关注网络安全动态，追求心中的向往</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: undefined
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/timg.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Smile921</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">迈入新世界，培养独当一面的 Web 前端工程师！</p>
+        
+
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/.">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/security">随笔</a></li>
+                        
+                            <li><a href="/archives/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:ruby2010ruby@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/smile921" title="GitHub"></a>
+                            
+                                <a class="fa V2EX" href="http://www.v2ex.com/member/lanyi921" title="V2EX"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IM/">IM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/KaTeX/">KaTeX</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Math/">Math</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TeX/">TeX</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/android/">android</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/api/">api</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/awesome/">awesome</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/blockchain/">blockchain</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bt/">bt</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/devdoc/">devdoc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/dht/">dht</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/">docker</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/electron/">electron</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/emacs/">emacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/forum/">forum</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/fun/">fun</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/git/">git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gitlab/">gitlab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/haskell/">haskell</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hello/">hello</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javascript/">javascript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/jpda/">jpda</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/koan/">koan</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/koans/">koans</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/lua/">lua</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongo/">mongo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mongodb/">mongodb</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mysql/">mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/">nginx</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nodejs/">nodejs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/note/">note</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/office/">office</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/oracle/">oracle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ruby/">ruby</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/science/">science</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/security/">security</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spcaemacs/">spcaemacs</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/telegram/">telegram</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/test/">test</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/truffle/">truffle</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tutor/">tutor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/waf/">waf</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web/">web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/web3j/">web3j</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/存储过程/">存储过程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/题解/">题解</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">专注于前端</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Smile921</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/timg.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Smile921</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">迈入新世界，培养独当一面的 Web 前端工程师！</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/.">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/security">随笔</a></li>
+                
+                    <li><a href="/archives/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:ruby2010ruby@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/smile921" title="GitHub"></a>
+                            
+                                <a class="fa V2EX" target="_blank" href="http://www.v2ex.com/member/lanyi921" title="V2EX"></a>
+                            
+                                <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-Ethereum-Blockchain-Block-Raw-Data-in-brief" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/201703Ethereum-Blockchain-Block-Raw-Data-in-brief/" class="article-date">
+      <time datetime="2017-03-17T09:04:56.000Z" itemprop="datePublished">2017-03-17</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Ethereum Blockchain Block Raw Data in brief
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/blockchain/">blockchain</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="Ethereum-Blockchain-Block-Raw-Data-in-brief"><a href="#Ethereum-Blockchain-Block-Raw-Data-in-brief" class="headerlink" title="Ethereum Blockchain Block Raw Data in brief"></a>Ethereum Blockchain Block Raw Data in brief</h1><h2 id="缘起"><a href="#缘起" class="headerlink" title="缘起"></a>缘起</h2><p>由于最近在看智能合约相关内容，但一个对区块链有一些隐约的困惑，没有一个感性的认识。于是有了想分析区块内容的想法，以便能更深刻的认识区块链。其次最近简单学习了以太坊区块数据的格式，做个简答小结。主要资料可参考 <a href="https://github.com/ethereum/wiki" target="_blank" rel="external">Ethereum Wiki</a></p>
+<h2 id="区块格式"><a href="#区块格式" class="headerlink" title="区块格式"></a>区块格式</h2><h3 id="以太坊区块格式"><a href="#以太坊区块格式" class="headerlink" title="以太坊区块格式"></a>以太坊区块格式</h3><p><a href="https://github.com/ethereum/wiki/blob/master/Block-Protocol-2.0.md" target="_blank" rel="external">主要参考这里</a><br>一个完整的区块定义格式是这样的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">[</div><div class="line">    block_header,</div><div class="line">    transaction_list,</div><div class="line">    uncle_list,</div><div class="line">    stack_trace</div><div class="line">]</div><div class="line">其中:</div><div class="line"></div><div class="line">transaction_list = [</div><div class="line">    transaction 0,</div><div class="line">    transaction 1,</div><div class="line">    ...</div><div class="line">]</div><div class="line"></div><div class="line">uncle list = [</div><div class="line">    uncle_block_header_1,</div><div class="line">    uncle_block_header_2,</div><div class="line">    ...</div><div class="line">]</div><div class="line"></div><div class="line">block_header = [</div><div class="line">    parent hash,</div><div class="line">    number,</div><div class="line">    TRIEHASH(transaction_list),</div><div class="line">    TRIEHASH(uncle_list),</div><div class="line">    TRIEHASH(stack_trace),</div><div class="line">    coinbase address,</div><div class="line">    state_root,</div><div class="line">    difficulty,</div><div class="line">    timestamp,</div><div class="line">    extra_data,</div><div class="line">    nonce</div><div class="line">]</div><div class="line"></div><div class="line">stack_trace = [</div><div class="line">    [ medhash 0, stkhash 0 ],</div><div class="line">    [ medhash 1, stkhash 1 ],</div><div class="line">    ...</div><div class="line">]</div></pre></td></tr></table></figure></p>
+<p>比如一个私链上的创世块是这样的<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">   rawData:</div><div class="line">   	f901f8f901f3a00000000000000000000000000000000000000000000000000000000000000000a01dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347940000000000000000000000000000000000000000a0a4328ecabdd749f4e24d190cd2bd00f6609f3334bf94a55fc2ea3e4ede05a44ba056e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421a056e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421b90100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008240008084ffffffff808080a00000000000000000000000000000000000000000000000000000000000000000880000000000000042c0c0</div><div class="line">   解析各个部分并按rfc定义用RLP编码转16进制输出</div><div class="line">BlockData [ </div><div class="line">truehash=55da6a62b7a8d0a438aa3934d3571b12269eb7c011a4e62df171de5c05fd2853</div><div class="line">true  hash=55da6a62b7a8d0a438aa3934d3571b12269eb7c011a4e62df171de5c05fd2853</div><div class="line">true  parentHash=0000000000000000000000000000000000000000000000000000000000000000</div><div class="line">true  unclesHash=1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347</div><div class="line">true  coinbase=0000000000000000000000000000000000000000</div><div class="line">true  stateRoot=a4328ecabdd749f4e24d190cd2bd00f6609f3334bf94a55fc2ea3e4ede05a44b</div><div class="line">true  txTrieHash=56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421</div><div class="line">true  receiptsTrieHash=56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421</div><div class="line">true  difficulty=4000   </div><div class="line">true  number=0        gasLimit=ffffffff</div><div class="line">true  gasUsed=0       timestamp=0 (1970.01.01 08:00:00)</div><div class="line">true  extraData=</div><div class="line">true  mixHash=0000000000000000000000000000000000000000000000000000000000000000</div><div class="line">true  nonce=0000000000000042</div><div class="line">trueUncles []              </div><div class="line">trueTxs []</div><div class="line">]</div></pre></td></tr></table></figure></p>
+<p>每个transaction 和uncle_block_header 都是一张表。工作量证明数据是区块数据去除掉nonce（交易数）后的RLP编码。<br>uncle_list 和 transaction_list 分别是叔区块头和区块里的交易构成的表。nonce 和 extra_data 都被限制为最大32字节，除了在创世区块中参数extra_data会更大。<br>state_root 是一个包含所有地址的（key, value）对的默克尔-帕特里夏树（Merkle Patricia tree ）的根， 其中每一个地址都由一个20字节二进制字符串表示。对于每个地址，储存在默克尔-帕特里夏树的 value 字段是一个对以下格式对象进行RLP串接编码形成的字符串：<br>[ balance, nonce, contract_root, storage_deposit ]</p>
+<p>nonce 是该地址的交易数，每做一次交易都会增加1。其目的是(1)使每个交易只有一次合法的机会以防范重放攻击，(2)使得构建一个和已存合约有相同哈希的合约成为不可能（更准确地说，密码学意义上不可行）。balance 指的是合约或地址的平衡账目，以伟为单位。contract_root 是另一个帕特里夏树的根，在该地址被一个合约控制的情况下包含该合约的内存。如果一个地址没有被一个合约控制，contract_root 就会是一个空字符串。storage_deposit是一个计数器，储存花费的储存费用</p>
+<p>注 RLP 递归长度前缀编码 (recursive length prefix encoding,RLP)<br>这种编码格式将任意长度和维度的字符串构成的数组串接成字符串。例如，[‘dog’, ‘cat’]被串接 (以字节数组格式) 为 [ 130, 67, 100, 111, 103, 67, 99, 97, 116];其基本的思想是把数据类型和长度编码成一个单独的字节放在实际数据的前面(例如‘dog’的字节数组编码为[ 100, 111, 103 ], 于是串接后就成了[ 67, 100, 111, 103 ].)注意RLP编码正如其名字表示的一样，是递归的；当RLP编码一个数组时，实际上是在对每一个元素的RLP编码级联成的字符串编码。需要进一步提请注意的是，以太坊中所有数据都是整数；所以，如果有任何的以一个或多个0字节开头的哈希或者地址，这些0字节应该在计算出现问题的时候去除。以太坊中没有串接数据结构包含任何以0开头的数值。整数以大端基础256格式存储(例如32767字节数组格式为[ 127, 255 ])。</p>
+<p>详细代码可以参考ethereumj中Block的代码部分<br> <img src="/images/blockchain-fmt-11.png" alt="blockchain "></p>
+<h3 id="bitcoin-区块格式"><a href="#bitcoin-区块格式" class="headerlink" title="bitcoin 区块格式"></a>bitcoin 区块格式</h3><p>关于bitcoin的区块格式，已经有前人做了分析大致结构如下<br> <img src="/images/blockchain-fmt-01.png" alt="blockchain-fmt"><br> <img src="/images/blockchain-fmt-02.png" alt="blockchain-fmt"><br> <img src="/images/blockchain-fmt-03.png" alt="blockchain-fmt"><br><a href="https://blockchain.info/block/000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f" target="_blank" rel="external">比特币创世区块</a>是这样的<br> <img src="/images/blockchain-fmt-04.png" alt="blockchain-fmt"><br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"> &#123;</div><div class="line">    &quot;txid&quot; : &quot;4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b&quot;,</div><div class="line">    &quot;version&quot; : 1,</div><div class="line">    &quot;locktime&quot; : 0,</div><div class="line">    &quot;vin&quot; : [</div><div class="line">        &#123;</div><div class="line">            &quot;coinbase&quot; : &quot;04ffff001d0104455468652054696d65732030332f4a616e2f32303039204368616e63656c6c6f72206f6e206272696e6b206f66207365636f6e64206261696c6f757420666f722062616e6b73&quot;,</div><div class="line">            &quot;sequence&quot; : 4294967295</div><div class="line">        &#125;</div><div class="line">    ],</div><div class="line">    &quot;vout&quot; : [</div><div class="line">        &#123;</div><div class="line">            &quot;value&quot; : 50.00000000,</div><div class="line">            &quot;n&quot; : 0,</div><div class="line">            &quot;scriptPubKey&quot; : &#123;</div><div class="line">                &quot;asm&quot; : &quot;04678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5f OP_CHECKSIG&quot;,</div><div class="line">                &quot;hex&quot; : &quot;4104678afdb0fe5548271967f1a67130b7105cd6a828e03909a67962e0ea1f61deb649f6bc3f4cef38c4f35504e51ec112de5c384df7ba0b8d578a4c702b6bf11d5fac&quot;,</div><div class="line">                &quot;reqSigs&quot; : 1,</div><div class="line">                &quot;type&quot; : &quot;pubkey&quot;,</div><div class="line">                &quot;addresses&quot; : [</div><div class="line">                    &quot;1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa&quot;</div><div class="line">                ]</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><img src="/images/blockchain-fmt-05.png" alt="blockchain-fmt"><br><img src="/images/blockchain-fmt-06.png" alt="blockchain-fmt"><br><img src="/images/blockchain-fmt-07.png" alt="blockchain-fmt"><br><img src="/images/blockchain-fmt-08.png" alt="blockchain-fmt"><br><img src="/images/blockchain-fmt-09.png" alt="blockchain-fmt"></p>
+<p>关键代码在 bitcoinj 的Block的代码<br><img src="/images/blockchain-fmt-10.png" alt="blockchain "></p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/201703Ethereum-Blockchain-Block-Raw-Data-in-brief/">Ethereum Blockchain Block Raw Data in brief</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Smile921</a></p>
+        <p><span>发布时间:</span>2017-03-17, 17:04:56</p>
+        <p><span>最后更新:</span>2017-03-17, 18:00:24</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/201703Ethereum-Blockchain-Block-Raw-Data-in-brief/" title="Ethereum Blockchain Block Raw Data in brief">http://smile921.github.io/201703Ethereum-Blockchain-Block-Raw-Data-in-brief/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://smile921.github.io/201703Ethereum-Blockchain-Block-Raw-Data-in-brief/　　作者: Smile921" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/201703基于以太坊的智能合约开发入门/">
+                    基于以太坊的智能合约开发入门
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Ethereum-Blockchain-Block-Raw-Data-in-brief"><span class="toc-number">1.</span> <span class="toc-text">Ethereum Blockchain Block Raw Data in brief</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#缘起"><span class="toc-number">1.1.</span> <span class="toc-text">缘起</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#区块格式"><span class="toc-number">1.2.</span> <span class="toc-text">区块格式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#以太坊区块格式"><span class="toc-number">1.2.1.</span> <span class="toc-text">以太坊区块格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bitcoin-区块格式"><span class="toc-number">1.2.2.</span> <span class="toc-text">bitcoin 区块格式</span></a></li></ol></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/201703基于以太坊的智能合约开发入门/" title="下一篇: 基于以太坊的智能合约开发入门">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/201703Ethereum-Blockchain-Block-Raw-Data-in-brief/">Ethereum Blockchain Block Raw Data in brief</a></li><li class="post-list-item"><a class="post-list-link" href="/201703基于以太坊的智能合约开发入门/">基于以太坊的智能合约开发入门</a></li><li class="post-list-item"><a class="post-list-link" href="/201703mongodb 实战笔记/">mongodb 3.4.x 入门笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/201611spaceemacs-学习笔记/">spaceemacs 学习笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/201610Why-is-char-preferred-over-String-for-passwords-in-Java/">Why is char[] preferred over String for passwords in Java?</a></li><li class="post-list-item"><a class="post-list-link" href="/201609Chromium-命令行启动参数/">Chromium 命令行启动参数 </a></li><li class="post-list-item"><a class="post-list-link" href="/201609目前比较流行的Python科学计算发行版/">目前比较流行的Python科学计算发行版</a></li><li class="post-list-item"><a class="post-list-link" href="/201608mysql-root密码重置/">mysql  root密码重置</a></li><li class="post-list-item"><a class="post-list-link" href="/201608electron-Build-cross-platform-desktop-apps-with-JavaScript-HTML-and-CSS/">electron Build cross platform desktop apps with JavaScript, HTML, and CSS</a></li><li class="post-list-item"><a class="post-list-link" href="/201608KaTeX-The-fastest-math-typesetting-library-for-the-web/">KaTeX The fastest math typesetting library for the web</a></li><li class="post-list-item"><a class="post-list-link" href="/201608oracle-存储过程解题示例一/">oracle 存储过程解题示例一</a></li><li class="post-list-item"><a class="post-list-link" href="/201608Android-开发最佳实践/">Android 开发最佳实践</a></li><li class="post-list-item"><a class="post-list-link" href="/201608java-jpda-远程调试/">java jpda 远程调试</a></li><li class="post-list-item"><a class="post-list-link" href="/201608动手安装-Haskell-koans-笔记/">动手安装 Haskell koans 笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/201608awesome-koans/">awesome koans</a></li><li class="post-list-item"><a class="post-list-link" href="/201608BT种子嗅探器原理/">BT种子嗅探器原理</a></li><li class="post-list-item"><a class="post-list-link" href="/201608NodeBB-基于-nodejs实现的社区论坛/">NodeBB 基于 nodejs实现的社区论坛</a></li><li class="post-list-item"><a class="post-list-link" href="/201608ONLYOFFICE-协同办公/">ONLYOFFICE 协同办公</a></li><li class="post-list-item"><a class="post-list-link" href="/201608docker-hub-国内加速/">docker hub 国内加速</a></li><li class="post-list-item"><a class="post-list-link" href="/201608Telegram-一款开源简洁的IM/">Telegram  一款开源简洁的IM</a></li><li class="post-list-item"><a class="post-list-link" href="/201608API-Documentation-Browser/">API Documentation Browser</a></li><li class="post-list-item"><a class="post-list-link" href="/201608nginx-lua-waf/">nginx lua waf</a></li><li class="post-list-item"><a class="post-list-link" href="/201608gitlab-实战笔记/">gitlab 实战笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/201608RAT（远程访问木马）名为SpyNote——这是个可对Android系统实现远程监听的工具/">RAT（远程访问木马）名为 SpyNote ——这是个可对 Android 系统实现远程监听的工具</a></li><li class="post-list-item"><a class="post-list-link" href="/201608security-list/">security list </a></li><li class="post-list-item"><a class="post-list-link" href="/201608haskell-资料收集/">haskell 资料收集</a></li><li class="post-list-item"><a class="post-list-link" href="/201607hello-world/">Hello World</a></li><li class="post-list-item"><a class="post-list-link" href="/201607hexo-for-fun/">hexo-for-fun</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 Smile921
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a>  <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+             tags: ".article-tag a", 
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
