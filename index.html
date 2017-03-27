@@ -474,7 +474,21 @@
 <p>然后 mongod -f mongod.conf<br>这事启动是带有认证的</p>
 <p>需要正常使用则应该先了解 <a href="https://docs.mongodb.com/manual/core/security-built-in-roles/" target="_blank" rel="external">内置role介绍</a><br>   mongo 127.0.0.1:27017/admin<br>   db.createUser({user:’adminxxx’,pwd:’passwordxxx’,roles:[‘root’]});<br>   db.auth(‘username’,’password’);<br>   然后创建普通用户<br>   需要 </p>
 <p>   db.createUser({user:’zjexxxx’,pwd:’passwordxxx’,roles:[{role:’dbOwner’,db:’yourdbname’]});<br>   db.auth(‘username’,’password’);<br>   use yourdbname;<br>   就可以操作数据库了</p>
-<p>   使用其他客户端 比如 mongoimport 导入csv我文件<br>   mongoimport –authenticationDatabase admin -u ‘username’ -p ‘password’ -d  SH_stock -c 600000 –type=csv –fields=’a1.string’,’a2.string’,’a3.double’,’a4.double’,’a5.double’,’a6.double’,’a7.int64’,’a8.double’ –file=./SH#600000.csv </p>
+<p>   使用其他客户端 比如 mongoimport 导入csv我文件<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">mongoimport --authenticationDatabase admin -u &apos;username&apos; -p &apos;password&apos; -d   </div><div class="line"> SH_stock -c 600000 --type=csv --fields=&apos;a1.string&apos;,&apos;a2.string&apos;,&apos;a3.double&apos;,</div><div class="line"> &apos;a4.double&apos;,&apos;a5.double&apos;,&apos;a6.double&apos;,&apos;a7.int64&apos;,</div><div class="line"> &apos;a8.double&apos; --file=./SH#600000.csv</div></pre></td></tr></table></figure></p>
+<h2 id="关于用户创建的一点提示"><a href="#关于用户创建的一点提示" class="headerlink" title="关于用户创建的一点提示"></a>关于用户创建的一点提示</h2><ul>
+<li><p>首先 mongo 连接上去</p>
+<blockquote>
+<p>   use admin<br>   db.auth(‘admin’,’password’); //管理员认证<br>   use db_zjex;<br>   db.createUser({user:’zjexxxx’,pwd:’passwordxxx’,roles:[{role:’dbOwner’,db:’db_zjex’]});<br>这种方式创建的用户 连接时可以直接<br>   mongo ip:27017/db_zjex -u zjexxxx -p passwordxxx<br>或者 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mongo ip:27017/db_zjex -u zjexxxx -p passwordxxx --authenticationDatabase db_zjex</div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+<li><p>如果是下面的方式创建用户<br>首先 mongo 连接上去</p>
+<blockquote>
+<p>   use admin<br>   db.auth(‘admin’,’password’); //管理员认证<br>   db.createUser({user:’zjexxxx’,pwd:’passwordxxx’,roles:[{role:’dbOwner’,db:’db_zjex’]});<br>  这种方式创建的用户 连接时可以直接 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mongo ip:27017/db_zjex -u zjexxxx -p passwordxxx --authenticationDatabase admin</div></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ul>
 
       
     </div>
